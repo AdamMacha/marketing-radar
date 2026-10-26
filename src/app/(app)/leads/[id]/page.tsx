@@ -164,6 +164,52 @@ export default async function LeadPage(props: PageProps<"/leads/[id]">) {
                       <dt>Odezva serveru</dt><dd className="mono">{a.responseTimeMs ? `${a.responseTimeMs} ms` : "–"}</dd>
                       <dt>Copyright</dt><dd className="mono">{a.copyrightYear ?? "–"}</dd>
                       <dt>Titulek</dt><dd title={a.title ?? ""}>{a.title ? a.title.slice(0, 40) : "✗"}</dd>
+                      <dt>Sociální sítě</dt>
+                      <dd>
+                        {a.socials && a.socials.length > 0 ? (
+                          <div className="row" style={{ gap: 4, justifyContent: "flex-end", flexWrap: "wrap" }}>
+                            {a.socials.map((s) => {
+                              const name = s.includes("facebook")
+                                ? "Facebook"
+                                : s.includes("instagram")
+                                  ? "Instagram"
+                                  : s.includes("linkedin")
+                                    ? "LinkedIn"
+                                    : s.includes("tiktok")
+                                      ? "TikTok"
+                                      : s.includes("youtube")
+                                        ? "YouTube"
+                                        : "Sociální síť";
+                              return (
+                                <a key={s} href={s} target="_blank" rel="noreferrer" className="badge" title={s}>
+                                  {name} ↗
+                                </a>
+                              );
+                            })}
+                          </div>
+                        ) : (
+                          <span className="badge badge-warn">Nenalezeny</span>
+                        )}
+                      </dd>
+                      <dt>Měřicí pixely</dt>
+                      <dd>
+                        {(() => {
+                          const pix = a.technologies.filter((t) =>
+                            ["Meta Pixel", "Google Analytics", "Google Tag Manager", "Google Ads", "Sklik Retargeting"].includes(t),
+                          );
+                          return pix.length > 0 ? (
+                            <div className="row" style={{ gap: 4, justifyContent: "flex-end", flexWrap: "wrap" }}>
+                              {pix.map((p) => (
+                                <span key={p} className="badge badge-good">
+                                  {p}
+                                </span>
+                              ))}
+                            </div>
+                          ) : (
+                            <span className="badge badge-warn">Chybí (žádný pixel)</span>
+                          );
+                        })()}
+                      </dd>
                       <dt>Technologie</dt>
                       <dd>
                         <div className="row" style={{ gap: 4, justifyContent: "flex-end" }}>
