@@ -10,8 +10,8 @@ export const config = {
   sessionSecret: env("SESSION_SECRET") ?? "dev-insecure-secret-change-me-please-32chars",
   cronSecret: env("CRON_SECRET"),
 
-  supabaseUrl: env("SUPABASE_URL"),
-  supabaseServiceKey: env("SUPABASE_SERVICE_ROLE_KEY"),
+  supabaseUrl: env("SUPABASE_URL") ?? env("NEXT_PUBLIC_SUPABASE_URL"),
+  supabaseServiceKey: env("SUPABASE_SERVICE_ROLE_KEY") ?? env("SUPABASE_SECRET_KEY"),
 
   googlePlacesKey: env("GOOGLE_PLACES_API_KEY"),
   pageSpeedKey: env("PAGESPEED_API_KEY") ?? env("GOOGLE_PLACES_API_KEY"),
