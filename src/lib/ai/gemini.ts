@@ -110,14 +110,20 @@ async function gemini<T>(prompt: string, requestedModel?: string): Promise<{ dat
 
 function leadContext(lead: Lead) {
   const a = lead.analysis;
+  const marketingTools = a?.technologies.filter((t) =>
+    ["Meta Pixel", "Google Tag Manager", "Google Analytics", "Google Ads", "Sklik Retargeting"].includes(t),
+  ) ?? [];
+
   return JSON.stringify(
     {
       firma: lead.name,
       obor: lead.category,
       mesto: lead.city,
-      hodnoceni_google: lead.rating,
-      pocet_recenzi: lead.reviewsCount,
+      hodnoceni_google: lead.rating ? `${lead.rating} ⭐` : "bez hodnocení",
+      pocet_recenzi: lead.reviewsCount ?? 0,
       web: lead.website ?? "nemá web",
+      socialni_site: a?.socials && a.socials.length > 0 ? a.socials : "žádné odkazy na sociální sítě na webu nenalezeny",
+      marketingove_nastroje_a_pixely: marketingTools.length > 0 ? marketingTools : "žádné měřicí pixely (Meta Pixel, Google Ads ani Sklik) nebyly detekovány",
       problemy: a?.issues.map((i) => `${i.title} – ${i.description}`) ?? [],
       pagespeed_mobil: a?.pageSpeed
         ? { vykon: a.pageSpeed.performance, seo: a.pageSpeed.seo, pristupnost: a.pageSpeed.accessibility }
